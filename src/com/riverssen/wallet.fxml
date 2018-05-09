@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riverssen.Controller">
+  <tabs>
+    <Tab text="Wallet">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="375.0" prefWidth="600.0">
+               <children>
+                  <ListView layoutX="14.0" layoutY="14.0" prefHeight="346.0" prefWidth="200.0" />
+                  <Button fx:id="qrcode" layoutX="522.0" layoutY="332.0" mnemonicParsing="false" onAction="#clickShowQRCode" text="QR Code" />
+                  <Text layoutX="220.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Public Address:" />
+                  <Text fx:id="address" layoutX="233.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IOAjYjXXyftlBmBTrJOF90hn94k">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="rvc" layoutX="220.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rivercoin: 0.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="import" layoutX="522.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickImportWallet" prefHeight="25.0" prefWidth="64.0" text="import" />
+                  <Button fx:id="copy" layoutX="522.0" layoutY="44.0" mnemonicParsing="false" onAction="#clickCopyAddress" prefHeight="25.0" prefWidth="64.0" text="copy" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="Generator">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="name" layoutX="115.0" layoutY="14.0" prefHeight="25.0" prefWidth="466.0" />
+                  <TextField fx:id="seed" layoutX="115.0" layoutY="48.0" prefHeight="25.0" prefWidth="466.0" />
+                  <TextField fx:id="password" layoutX="115.0" layoutY="82.0" prefHeight="25.0" prefWidth="466.0" />
+                  <Button fx:id="generate" layoutX="517.0" layoutY="118.0" mnemonicParsing="false" onAction="#clickGenerate" text="generate" />
+                  <Text layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="wallet name" />
+                  <Text layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="wallet seed" />
+                  <Text layoutX="14.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="wallet password" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+      <Tab text="About">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Riverwallet Version 0.0.1a" />
+                  <Text layoutX="14.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Licence and Terms Of Service: " />
+                  <Hyperlink layoutX="177.0" layoutY="28.0" onAction="#clickLicenseLink" text="http://www.riverssen.com/coin/wallet/license" />
+                  <Text layoutX="14.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This Program Uses A Third Party API 'Bouncy Castle Provider'">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="14.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="API license: "/>
+                  <Hyperlink layoutX="81.0" layoutY="88.0" onAction="#clickAPILicense" text="http://www.bouncycastle.org/licence.html"/>
+                  <Text layoutX="14.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Website:" />
+                  <Hyperlink layoutX="81.0" layoutY="108.0" onAction="#clickAPIWebsite" text="http://www.bouncycastle.org"/>
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>
