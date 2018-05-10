@@ -1,27 +1,47 @@
 package com.riverssen;
 
-import com.riverssen.core.security.PubKey;
-import com.riverssen.core.security.Wallet;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import sun.net.www.http.HttpClient;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Desktop;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Label;
+import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
+
+import com.riverssen.core.security.PubKey;
+import com.riverssen.core.security.Wallet;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 
 public class Controller implements Initializable
 {
@@ -122,9 +142,34 @@ public class Controller implements Initializable
 
     public void clickShowQRCode()
     {
-        JLabel label = new JLabel(new ImageIcon(image));
+    	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    	
+    	alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getDialogPane().setContentText("Make sure to scan your QR code to match it with your public address.");
 
-        JOptionPane.showMessageDialog(null, label, "This is your public QR code", JOptionPane.INFORMATION_MESSAGE, null);
+        DialogPane dialogPane = alert.getDialogPane();
+        GridPane grid = new GridPane();
+        ColumnConstraints graphicColumn = new ColumnConstraints();
+        graphicColumn.setFillWidth(false);
+        graphicColumn.setHgrow(Priority.NEVER);
+        ColumnConstraints textColumn = new ColumnConstraints();
+        textColumn.setFillWidth(true);
+        textColumn.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().setAll(graphicColumn, textColumn);
+        grid.setPadding(new javafx.geometry.Insets(5));
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(SwingFXUtils.toFXImage(this.image, null));
+        imageView.setFitWidth(512);
+        imageView.setFitHeight(512);
+        StackPane stackPane = new StackPane(imageView);
+        stackPane.setAlignment(Pos.CENTER);
+        grid.add(stackPane, 0, 0);
+
+        dialogPane.setHeader(grid);
+        dialogPane.setGraphic(null);
+
+        alert.showAndWait();
     }
 
     public void clickGenerate()
@@ -151,18 +196,23 @@ public class Controller implements Initializable
             return;
         }
 
-        if (password.getText().length() < 16)
+        if (password.getText().length() == 0)
         {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Alert");
-            alert.setHeaderText("Wallet Generation Error");
-            alert.setContentText("Please enter a password to encrypt your wallet file! Passwords must be at least 16 characters long.");
+            alert.setHeaderText("Wallet Generation Confirmation");
+            alert.setContentText("Are you sure you don't want to encrypt your private wallet with a password?");
 
-            alert.showAndWait();
+            alert.showAndWait().filter(r -> r == ButtonType.YES).ifPresent(r -> generateWallet());
             return;
         }
 
-        DirectoryChooser fileChooser = new DirectoryChooser();
+        generateWallet();
+    }
+    
+    public void generateWallet()
+    {
+    	DirectoryChooser fileChooser = new DirectoryChooser();
         fileChooser.setTitle("Open Resource File");
         File selectedFile = fileChooser.showDialog(null);//.showOpenDialog(null);
         if (selectedFile == null)
@@ -178,6 +228,12 @@ public class Controller implements Initializable
 
         Wallet wallet = new Wallet(name.getText(), seed.getText());
 
+        while(password.getText().length() < 16)
+        {
+//        	BigInteger b = new BigInteger(password.getText().getBytes());
+        	password.setText(password.getText() + "0");
+        }
+        
         int i = wallet.export(password.getText().substring(0, 16), selectedFile);
 
         if (i == 0)

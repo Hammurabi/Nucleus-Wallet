@@ -27,7 +27,7 @@ public class Main extends Application
     public void start(Stage primaryStage) throws Exception
     {
         Parent root = FXMLLoader.load(getClass().getResource("wallet.fxml"));
-        primaryStage.setTitle("Riverwallet v0.0.1a");
+        primaryStage.setTitle("Riverwallet v0.0.12a");
         primaryStage.setScene(Main.root = new Scene(root, 600, 395));
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
