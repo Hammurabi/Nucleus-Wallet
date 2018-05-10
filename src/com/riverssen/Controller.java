@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
@@ -84,6 +85,49 @@ public class Controller implements Initializable
 
             alert.showAndWait();
             return;
+        }
+        
+        if(selectedFile.getName().endsWith(".txt"))
+        {
+        	try {
+            	BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+            	
+            	String publicKey = reader.readLine();
+            	
+            	reader.close();
+            	
+                address.setText(publicKey);
+
+                try
+                {
+                    final String api = "https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=" + publicKey;
+
+                    try
+                    {
+                        image = ImageIO.read(new URL(api));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                        image = black;
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+        	} catch(Exception e)
+        	{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Alert");
+                alert.setHeaderText("Wallet Import Error");
+                alert.setContentText("Please choose a valid txt file.");
+
+                alert.showAndWait();
+                address.setText("");
+                image = black;
+        	}
+        	
+        	update();
+        	return;
         }
 
         try
